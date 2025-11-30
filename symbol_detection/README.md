@@ -38,5 +38,5 @@ python symbol_detection/predict.py \
 ## Demo
 Run the pipeline with a sample image from the dataset (requires API key):
 ```bash
-bash symbol_detection/run_demo.sh YOUR_API_KEY
+bash scripts/run_demo.sh YOUR_API_KEY
 ```
