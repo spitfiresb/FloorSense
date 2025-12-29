@@ -1,3 +1,24 @@
+# Floor Plan AI Analyzer (Web App)
+
+## 🚀 Getting Started
+
+This repository contains a modern web application for floor plan analysis.
+
+### Prerequisites
+- Node.js 18+
+- npm
+
+### Installation & Running
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to use the application.
+
+---
+
 # CubiCasa5K: A Dataset and an Improved Multi-Task Model for Floorplan Image Analysis
 
 Paper: [CubiCasa5K: A Dataset and an Improved Multi-Task Model for Floorplan Image Analysis](https://arxiv.org/abs/1904.01920v1)

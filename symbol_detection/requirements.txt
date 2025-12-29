@@ -1,5 +1,0 @@
-
-opencv-python
-tqdm
-pyyaml
-roboflow
