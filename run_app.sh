@@ -29,15 +29,10 @@ echo "🔄 Activating virtual environment..."
 source venv/bin/activate
 
 # Check if dependencies are installed
-if ! python -c "import gradio" &> /dev/null; then
-    echo "📥 Installing dependencies..."
-    pip install -r requirements_app.txt
-    echo "✅ Dependencies installed"
-    echo ""
-else
-    echo "✅ Dependencies already installed"
-    echo ""
-fi
+echo "📥 Checking dependencies..."
+pip install --upgrade -r requirements_app.txt
+echo "✅ Dependencies installed/verified"
+echo ""
 
 # Check for .env file
 if [ -f ".env" ]; then
