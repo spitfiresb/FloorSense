@@ -88,8 +88,8 @@ export default function DashboardPage() {
 
             {/* Main Content Area */}
             <div className={`transition-all duration-500
-                ${(imageSrc || result)
-                    ? "fixed inset-0 z-50 bg-slate-950"
+                {(imageSrc || result)
+                    ? "fixed inset-0 z-50 bg-black"
                     : "h-screen flex flex-col items-center justify-center"
                 }
             `}>
@@ -98,20 +98,18 @@ export default function DashboardPage() {
                 )}
 
                 {!imageSrc ? (
-                    <div className="h-full min-h-[500px] flex flex-col p-8 relative">
+                    <div className="fixed inset-0 flex items-center justify-center p-8">
                         <BackButton href="/" />
-                        <div className="flex-1 flex items-center justify-center">
-                            <div className="w-full max-w-xl">
-                                <UploadZone onFileSelect={handleFileSelect} isProcessing={isProcessing} />
-                            </div>
+                        <div className="w-full max-w-xl">
+                            <UploadZone onFileSelect={handleFileSelect} isProcessing={isProcessing} />
                         </div>
                     </div>
                 ) : (
                     <div className="h-full w-full">
                         {isProcessing && !result && (
-                            <div className="absolute inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center flex-col space-y-4">
-                                <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                                <p className="text-blue-400 font-medium animate-pulse">Running Computer Vision Models...</p>
+                            <div className="absolute inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center flex-col space-y-4">
+                                <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                                <p className="text-white font-medium animate-pulse">Processing</p>
                             </div>
                         )}
 
@@ -124,8 +122,8 @@ export default function DashboardPage() {
                             />
                         ) : (
                             // Show just image if result not ready yet (before processing or strictly loading)
-                            <div className="flex items-center justify-center h-full">
-                                <img src={imageSrc} className="max-h-[80vh] w-auto opacity-50 blur-sm transition-all duration-500" />
+                            <div className="flex items-center justify-center h-full p-8">
+                                <img src={imageSrc} className="max-h-[80vh] max-w-full w-auto object-contain opacity-50 blur-sm transition-all duration-500" />
                             </div>
                         )}
                     </div>

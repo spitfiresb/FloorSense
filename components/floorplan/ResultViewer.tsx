@@ -74,104 +74,106 @@ export default function ResultViewer({ imageSrc, predictions, imageWidth, imageH
     }, {} as Record<string, { count: number; firstIndex: number }>);
 
     return (
-        <div className="w-full h-full flex items-center justify-center overflow-hidden bg-slate-950 relative">
+        <div className="w-full h-full flex items-center justify-center overflow-hidden bg-black relative p-8">
 
-            {/* Summary Panel - Dynamic Side Section */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-8 z-40 flex flex-col gap-3 pointer-events-none">
-                <AnimatePresence>
-                    {Object.entries(summaryData).map(([className, data]) => {
-                        const color = classColors.get(className);
-                        return (
-                            <motion.div
-                                key={className}
-                                initial={{ x: -20, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{
-                                    delay: data.firstIndex * 0.05, // Sync exactly with the first box of this class
-                                    type: "spring",
-                                    stiffness: 100
-                                }}
-                                onClick={() => toggleClass(className)}
-                                className={`pointer-events-auto flex items-center gap-3 bg-slate-900/80 backdrop-blur-md p-3 pr-6 rounded-l-md rounded-r-xl border-l-4 shadow-xl border-white/10 cursor-pointer hover:bg-slate-800 hover:scale-105 active:scale-95 transition-all duration-200 ${hiddenClasses.has(className) ? "opacity-50 grayscale" : ""
-                                    }`}
-                                style={{ borderLeftColor: color }}
-                            >
-                                <span className="text-2xl font-bold text-white">{data.count}</span>
-                                <span className="text-sm font-medium text-slate-300 uppercase tracking-wider">{className}</span>
-                            </motion.div>
-                        );
-                    })}
-                </AnimatePresence>
-            </div>
-
-            {/* Image Viewer Area */}
-            {/* We center the image in the full screen container */}
-            <div className="relative inline-block max-w-full max-h-full">
-                <img
-                    src={imageSrc}
-                    alt="Floor Plan"
-                    className="max-h-screen w-auto object-contain rounded-lg shadow-2xl"
-                />
-
-                {/* Overlay Layer */}
-                <div className="absolute inset-0 pointer-events-none">
+            <div className="flex items-center justify-center gap-10 max-w-full max-h-full translate-y-6">
+                {/* Summary Panel - Dynamic Side Section */}
+                <div className="flex flex-col gap-3 pointer-events-none z-40 shrink-0">
                     <AnimatePresence>
-                        {sortedPredictions
-                            .filter(pred => !hiddenClasses.has(pred.class))
-                            .map((pred, idx) => {
-                                const color = classColors.get(pred.class) || "#fff";
-                                // Create a stable key for animation to work correctly when filtering
-                                const uniqueKey = `${pred.class}-${pred.x}-${pred.y}-${pred.width}-${pred.height}`;
-                                const isHovered = hoveredId === uniqueKey;
-
-                                // Safe guard against missing dimensions
-                                if (!imageWidth || !imageHeight) return null;
-
-                                const left = ((pred.x - pred.width / 2) / imageWidth) * 100;
-                                const top = ((pred.y - pred.height / 2) / imageHeight) * 100;
-                                const width = (pred.width / imageWidth) * 100;
-                                const height = (pred.height / imageHeight) * 100;
-
-                                return (
-                                    <motion.div
-                                        key={uniqueKey}
-                                        initial={{ opacity: 0, scale: 0 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{
-                                            duration: 0.5,
-                                            delay: idx * 0.05, // Stagger effect
-                                            type: "spring",
-                                            stiffness: 200,
-                                            damping: 20
-                                        }}
-                                        exit={{ opacity: 0, scale: 0 }}
-                                        className="absolute border-[3px] md:border-4 pointer-events-auto cursor-pointer group"
-                                        style={{
-                                            left: `${left}%`,
-                                            top: `${top}%`,
-                                            width: `${width}%`,
-                                            height: `${height}%`,
-                                            borderColor: color,
-                                            backgroundColor: isHovered ? `${color}33` : "transparent",
-                                            zIndex: 10 + idx, // Explicit z-index stack: Smaller items (higher idx) on top
-                                            boxShadow: `0 0 20px ${color}40` // Glow effect
-                                        }}
-                                        onMouseEnter={() => setHoveredId(uniqueKey)}
-                                        onMouseLeave={() => setHoveredId(null)}
-                                    >
-                                        {/* Tooltip */}
-                                        {isHovered && (
-                                            <div
-                                                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 rounded-md text-xs font-bold text-white whitespace-nowrap z-50 shadow-lg pointer-events-none"
-                                                style={{ backgroundColor: color }}
-                                            >
-                                                {pred.class} ({Math.round(pred.confidence * 100)}%)
-                                            </div>
-                                        )}
-                                    </motion.div>
-                                );
-                            })}
+                        {Object.entries(summaryData).map(([className, data]) => {
+                            const color = classColors.get(className);
+                            return (
+                                <motion.div
+                                    key={className}
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    transition={{
+                                        delay: data.firstIndex * 0.05, // Sync exactly with the first box of this class
+                                        type: "spring",
+                                        stiffness: 100
+                                    }}
+                                    onClick={() => toggleClass(className)}
+                                    className={`pointer-events-auto flex items-center gap-3 bg-slate-900/80 backdrop-blur-md p-3 pr-6 rounded-l-md rounded-r-xl border-l-4 shadow-xl border-white/10 cursor-pointer hover:bg-slate-800 hover:scale-105 active:scale-95 transition-all duration-200 ${hiddenClasses.has(className) ? "opacity-50 grayscale" : ""
+                                        }`}
+                                    style={{ borderLeftColor: color }}
+                                >
+                                    <span className="text-2xl font-bold text-white">{data.count}</span>
+                                    <span className="text-sm font-medium text-slate-300 uppercase tracking-wider">{className}</span>
+                                </motion.div>
+                            );
+                        })}
                     </AnimatePresence>
+                </div>
+
+                {/* Image Viewer Area */}
+                {/* We center the image in the full screen container */}
+                <div className="relative inline-block max-w-full max-h-full shrink">
+                    <img
+                        src={imageSrc}
+                        alt="Floor Plan"
+                        className="max-h-[85vh] max-w-full w-auto object-contain rounded-lg shadow-2xl"
+                    />
+
+                    {/* Overlay Layer */}
+                    <div className="absolute inset-0 pointer-events-none">
+                        <AnimatePresence>
+                            {sortedPredictions
+                                .filter(pred => !hiddenClasses.has(pred.class))
+                                .map((pred, idx) => {
+                                    const color = classColors.get(pred.class) || "#fff";
+                                    // Create a stable key for animation to work correctly when filtering
+                                    const uniqueKey = `${pred.class}-${pred.x}-${pred.y}-${pred.width}-${pred.height}`;
+                                    const isHovered = hoveredId === uniqueKey;
+
+                                    // Safe guard against missing dimensions
+                                    if (!imageWidth || !imageHeight) return null;
+
+                                    const left = ((pred.x - pred.width / 2) / imageWidth) * 100;
+                                    const top = ((pred.y - pred.height / 2) / imageHeight) * 100;
+                                    const width = (pred.width / imageWidth) * 100;
+                                    const height = (pred.height / imageHeight) * 100;
+
+                                    return (
+                                        <motion.div
+                                            key={uniqueKey}
+                                            initial={{ opacity: 0, scale: 0 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            transition={{
+                                                duration: 0.5,
+                                                delay: idx * 0.05, // Stagger effect
+                                                type: "spring",
+                                                stiffness: 200,
+                                                damping: 20
+                                            }}
+                                            exit={{ opacity: 0, scale: 0 }}
+                                            className="absolute border-[3px] md:border-4 pointer-events-auto cursor-pointer group"
+                                            style={{
+                                                left: `${left}%`,
+                                                top: `${top}%`,
+                                                width: `${width}%`,
+                                                height: `${height}%`,
+                                                borderColor: color,
+                                                backgroundColor: isHovered ? `${color}33` : "transparent",
+                                                zIndex: 10 + idx, // Explicit z-index stack: Smaller items (higher idx) on top
+                                                boxShadow: `0 0 20px ${color}40` // Glow effect
+                                            }}
+                                            onMouseEnter={() => setHoveredId(uniqueKey)}
+                                            onMouseLeave={() => setHoveredId(null)}
+                                        >
+                                            {/* Tooltip */}
+                                            {isHovered && (
+                                                <div
+                                                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 rounded-md text-xs font-bold text-white whitespace-nowrap z-50 shadow-lg pointer-events-none"
+                                                    style={{ backgroundColor: color }}
+                                                >
+                                                    {pred.class} ({Math.round(pred.confidence * 100)}%)
+                                                </div>
+                                            )}
+                                        </motion.div>
+                                    );
+                                })}
+                        </AnimatePresence>
+                    </div>
                 </div>
             </div>
 

@@ -80,6 +80,39 @@ function UploadZone({ onFileSelect, isProcessing }: { onFileSelect: (file: File)
             <p className="text-sm text-slate-500 font-medium">
                 Supported formats: PNG, JPG
             </p>
+
+            <div className="w-full pt-8 border-t border-slate-800/50 flex flex-col items-center gap-4">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">
+                    Or try one of these
+                </p>
+                <div className="flex gap-4">
+                    {[1, 2, 3].map((i) => (
+                        <button
+                            key={i}
+                            onClick={async () => {
+                                try {
+                                    const response = await fetch(`/examples/sample_${i}.png`);
+                                    const blob = await response.blob();
+                                    const file = new File([blob], `sample_${i}.png`, { type: "image/png" });
+                                    onFileSelect(file);
+                                } catch (error) {
+                                    console.error("Error loading sample:", error);
+                                }
+                            }}
+                            className="group relative w-20 h-20 rounded-lg overflow-hidden border border-slate-700 hover:border-blue-500 transition-all cursor-pointer hover:scale-105 active:scale-95"
+                            disabled={isProcessing}
+                        >
+                            <img
+                                src={`/examples/sample_${i}.png`}
+                                alt={`Sample ${i}`}
+                                className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                            />
+                            {/* Overlay for hover state */}
+                            <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </button>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }
