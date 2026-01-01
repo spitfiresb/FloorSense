@@ -171,8 +171,9 @@ export default function DashboardPage() {
                             />
                         ) : (
                             // Show just image if result not ready yet (before processing or strictly loading)
-                            <div className="flex items-center justify-center h-full p-8">
-                                <img src={imageSrc} className="max-h-[80vh] max-w-full w-auto object-contain opacity-50 blur-sm transition-all duration-500" />
+                            <div className="flex items-center justify-center h-screen p-8 gap-10">
+                                <div className="min-w-[160px] shrink-0" />
+                                <img src={imageSrc} className="max-h-[85vh] max-w-full w-auto object-contain opacity-50 blur-sm transition-all duration-500" />
                             </div>
                         )}
                     </div>
