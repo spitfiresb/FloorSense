@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AnalysisResult, PlanElement } from '../types';
+import { AnalysisResult, PlanElement, ElementType } from '../types';
 import { Button } from './Button';
 import { Save, Edit2, Check, Plus, Minus } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ViewerProps {
   image: string;
@@ -31,7 +32,7 @@ export const Viewer: React.FC<ViewerProps> = ({ image, data }) => {
 
   // Edit Mode State
   const [editAction, setEditAction] = useState<'none' | 'add' | 'remove'>('none');
-  const [selectedType, setSelectedType] = useState<string>('window');
+  const [selectedType, setSelectedType] = useState<ElementType>('window');
   const [dragStart, setDragStart] = useState<{ x: number, y: number } | null>(null);
   const [currentDrag, setCurrentDrag] = useState<{ x: number, y: number } | null>(null);
 
@@ -138,17 +139,18 @@ export const Viewer: React.FC<ViewerProps> = ({ image, data }) => {
   }, {} as Record<string, number>);
 
   return (
-    <div className="w-full h-full flex flex-col lg:flex-row gap-8 p-6 max-w-[1600px] mx-auto">
+    <div className="w-full h-full flex flex-col lg:flex-row gap-8 p-6 max-w-[1600px] mx-auto relative overflow-hidden">
       {/* Left Sidebar: Stats (View Mode) or Legend */}
-      <div className={`w-full lg:w-64 flex-shrink-0 transition-all duration-300 ${isEditing ? 'opacity-50 pointer-events-none hidden lg:block' : ''}`}>
-        <div className="border-2 border-ink p-6 bg-white shadow-sketch relative">
+      {/* Left Sidebar: Stats (View Mode) or Legend */}
+      <div className="w-full lg:w-36 flex-shrink-0 lg:block hidden">
+        <div className="border-2 border-ink p-3 bg-white shadow-sketch relative">
           {/* Decorative paper lines */}
+          <div className="absolute top-0 left-3 bottom-0 w-[1px] bg-red-100/50"></div>
           <div className="absolute top-0 left-4 bottom-0 w-[1px] bg-red-100/50"></div>
-          <div className="absolute top-0 left-5 bottom-0 w-[1px] bg-red-100/50"></div>
 
-          <h3 className="font-hand text-2xl font-bold mb-6 border-b-2 border-gray-200 pb-2">Analysis Display</h3>
+          <h3 className="font-hand text-lg font-bold mb-4 border-b-2 border-gray-200 pb-1">Analysis</h3>
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             {(Object.keys(COLORS) as Array<keyof typeof COLORS>).map(type => {
               const count = currentSummary[type] || 0;
               // Hide if count is 0
@@ -156,14 +158,14 @@ export const Viewer: React.FC<ViewerProps> = ({ image, data }) => {
 
               return (
                 <div key={type} className="flex items-center justify-between group cursor-pointer" onClick={() => toggleLayer(type)}>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
                     <div
-                      className={`w-8 h-8 border-2 border-ink rounded-sm shadow-sm transition-opacity ${!activeLayers[type] ? 'opacity-30' : ''}`}
+                      className={`w-5 h-5 border-2 border-ink rounded-sm shadow-sm transition-opacity ${!activeLayers[type] ? 'opacity-30' : ''}`}
                       style={{ backgroundColor: COLORS[type] }}
                     />
-                    <span className="font-hand text-xl uppercase tracking-wide">{type}</span>
+                    <span className="font-hand text-xs uppercase tracking-wide">{type}</span>
                   </div>
-                  <span className="font-hand text-2xl font-bold">{count}</span>
+                  <span className="font-hand text-sm font-bold">{count}</span>
                 </div>
               );
             })}
@@ -248,108 +250,137 @@ export const Viewer: React.FC<ViewerProps> = ({ image, data }) => {
       </div>
 
       {/* Right Sidebar: Edit Controls */}
-      {isEditing && (
-        <div className="w-full lg:w-72 flex-shrink-0 animate-fade-in-right">
-          <div className="border-2 border-ink p-6 bg-white shadow-sketch h-full flex flex-col">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-hand text-2xl font-bold">EDIT MODE</h3>
-            </div>
+      <AnimatePresence>
+        {isEditing && (
+          <motion.div
+            layout
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 250, opacity: 1 }}
+            exit={{ width: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="flex-shrink-0 h-full z-20 overflow-hidden"
+          >
+            <div className="w-[250px] h-full border-2 border-ink p-4 bg-white shadow-sketch flex flex-col">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="font-hand text-lg font-bold">EDIT MODE</h3>
+              </div>
 
-            <div className="flex gap-4 mb-4">
-              <Button
-                variant={editAction === 'add' ? 'primary' : 'secondary'}
-                className="flex-1 text-sm py-1 px-2"
-                onClick={() => setEditAction(editAction === 'add' ? 'none' : 'add')}
-              >
-                ADD <Plus className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={editAction === 'remove' ? 'primary' : 'secondary'}
-                className="flex-1 text-sm py-1 px-2"
-                onClick={() => setEditAction(editAction === 'remove' ? 'none' : 'remove')}
-              >
-                REMOVE <Minus className="w-4 h-4" />
-              </Button>
-            </div>
+              <div className="flex gap-2 mb-4">
+                <Button
+                  variant={editAction === 'add' ? 'primary' : 'secondary'}
+                  className="flex-1 text-xs py-1 px-1 h-8"
+                  onClick={() => setEditAction(editAction === 'add' ? 'none' : 'add')}
+                >
+                  ADD <Plus className="w-3 h-3" />
+                </Button>
+                <Button
+                  variant={editAction === 'remove' ? 'primary' : 'secondary'}
+                  className="flex-1 text-xs py-1 px-1 h-8"
+                  onClick={() => setEditAction(editAction === 'remove' ? 'none' : 'remove')}
+                >
+                  REMOVE <Minus className="w-3 h-3" />
+                </Button>
+              </div>
 
-            {/* Type Selector for Adding */}
-            {editAction === 'add' && (
-              <div className="mb-8 p-4 bg-gray-50 border border-gray-200 rounded animate-fade-in">
-                <p className="font-hand text-lg mb-2">Item to Add:</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {(Object.keys(COLORS) as Array<keyof typeof COLORS>)
-                    .filter(type => type !== 'furniture')
-                    .map(type => (
-                      <button
-                        key={type}
-                        onClick={() => setSelectedType(type)}
-                        className={`
-                                            px-2 py-1 text-sm rounded border-2 transition-all capitalize font-hand
+              {/* Type Selector for Adding */}
+              <AnimatePresence>
+                {editAction === 'add' && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded">
+                      <p className="font-hand text-sm mb-2">Item to Add:</p>
+                      <div className="grid grid-cols-2 gap-1">
+                        {(Object.keys(COLORS) as Array<keyof typeof COLORS>)
+                          .filter(type => type !== 'furniture')
+                          .map(type => (
+                            <button
+                              key={type}
+                              onClick={() => setSelectedType(type)}
+                              className={`
+                                            px-1 py-1 text-xs rounded border-2 transition-all capitalize font-hand
                                             ${selectedType === type
-                            ? 'bg-ink text-white border-ink'
-                            : 'bg-white border-gray-300 hover:border-gray-500'
-                          }
+                                  ? 'bg-ink text-white border-ink'
+                                  : 'bg-white border-gray-300 hover:border-gray-500'
+                                }
                                         `}
-                      >
-                        {type}
-                      </button>
-                    ))
-                  }
-                </div>
-                <p className="text-xs text-gray-500 mt-2 font-sans italic">
-                  Click and drag on the image to draw a new {selectedType}.
-                </p>
-              </div>
-            )}
-
-            {editAction === 'remove' && (
-              <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded animate-fade-in">
-                <p className="font-hand text-lg text-red-700">Select items to remove</p>
-                <p className="text-xs text-red-500 mt-1 font-sans italic">
-                  Click any box on the image to delete it.
-                </p>
-              </div>
-            )}
-
-            <div className="space-y-4 flex-grow overflow-y-auto">
-              <p className="font-hand text-xl border-b pb-2 mb-2">Visibility</p>
-              {/* Filter out furniture */}
-              {(Object.keys(COLORS) as Array<keyof typeof COLORS>)
-                .filter(type => type !== 'furniture')
-                .map(type => (
-                  <label key={type} className="flex items-center gap-3 cursor-pointer select-none">
-                    <div className="relative">
-                      <input
-                        type="checkbox"
-                        className="peer appearance-none w-6 h-6 border-2 border-ink rounded-sm checked:bg-ink transition-colors"
-                        checked={activeLayers[type]}
-                        onChange={() => toggleLayer(type)}
-                      />
-                      <Check className="w-4 h-4 text-white absolute top-1 left-1 opacity-0 peer-checked:opacity-100 pointer-events-none" />
+                            >
+                              {type}
+                            </button>
+                          ))
+                        }
+                      </div>
+                      <p className="text-[10px] text-gray-500 mt-2 font-sans italic leading-tight">
+                        Click and drag on the image to draw a new {selectedType}.
+                      </p>
                     </div>
-                    <span className="font-hand text-xl capitalize">{type}</span>
-                  </label>
-                ))}
-            </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-            <div className="mt-8 space-y-4 pt-6 border-t-2 border-dashed border-gray-300">
-              <Button className="w-full bg-blue-100 hover:bg-blue-200" onClick={downloadImage}>
-                SAVE IMAGE <Save className="w-4 h-4" />
-              </Button>
-              <Button className="w-full" onClick={() => { setIsEditing(false); setEditAction('none'); }}>
-                DONE
-              </Button>
+              <AnimatePresence>
+                {editAction === 'remove' && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded">
+                      <p className="font-hand text-sm text-red-700">Select items to remove</p>
+                      <p className="text-[10px] text-red-500 mt-1 font-sans italic leading-tight">
+                        Click any box on the image to delete it.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <div className="space-y-3 overflow-y-auto max-h-[40vh]">
+                <p className="font-hand text-sm border-b pb-1 mb-1">Visibility</p>
+                {/* Filter out furniture */}
+                {(Object.keys(COLORS) as Array<keyof typeof COLORS>)
+                  .filter(type => type !== 'furniture')
+                  .map(type => (
+                    <label key={type} className="flex items-center gap-2 cursor-pointer select-none">
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          className="peer appearance-none w-4 h-4 border-2 border-ink rounded-sm checked:bg-ink transition-colors"
+                          checked={activeLayers[type]}
+                          onChange={() => toggleLayer(type)}
+                        />
+                        <Check className="w-3 h-3 text-white absolute top-0.5 left-0.5 opacity-0 peer-checked:opacity-100 pointer-events-none" />
+                      </div>
+                      <span className="font-hand text-sm capitalize">{type}</span>
+                    </label>
+                  ))}
+              </div>
+
+              <div className="mt-4 space-y-2 pt-4 border-t-2 border-dashed border-gray-300">
+                <Button className="w-full bg-blue-100 hover:bg-blue-200 text-xs py-1" onClick={downloadImage}>
+                  SAVE IMAGE <Save className="w-3 h-3" />
+                </Button>
+                <Button className="w-full text-xs py-1" onClick={() => { setIsEditing(false); setEditAction('none'); }}>
+                  DONE
+                </Button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Save Button for View Mode (Top Right usually) */}
-      {!isEditing && (
-        <div className="absolute top-24 right-8 lg:static lg:block hidden">
-          {/* Placeholder to balance layout if needed */}
-        </div>
-      )}
-    </div>
+      {
+        !isEditing && (
+          <div className="absolute top-24 right-8 lg:static lg:block hidden">
+            {/* Placeholder to balance layout if needed */}
+          </div>
+        )
+      }
+    </div >
   );
 };
