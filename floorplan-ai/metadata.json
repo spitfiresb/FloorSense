@@ -1,0 +1,5 @@
+{
+  "name": "FloorPlan AI",
+  "description": "Intelligent architectural analysis tool that uses AI to identify rooms, doors, and windows in floor plans.",
+  "requestFramePermissions": []
+}

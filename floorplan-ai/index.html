@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FloorPlan AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'hand': ['"Patrick Hand"', 'cursive'],
+              'sans': ['Inter', 'sans-serif'],
+            },
+            colors: {
+              'paper': '#fdfbf7',
+              'ink': '#2c2c2c',
+              'sketch-blue': '#4a90e2',
+              'sketch-pink': '#e24a8d',
+              'sketch-green': '#50e3c2',
+              'sketch-orange': '#f5a623',
+            },
+            boxShadow: {
+              'sketch': '3px 3px 0px 0px rgba(0,0,0,0.8)',
+              'sketch-hover': '5px 5px 0px 0px rgba(0,0,0,0.8)',
+              'sketch-sm': '2px 2px 0px 0px rgba(0,0,0,0.8)',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #fdfbf7;
+        color: #2c2c2c;
+      }
+      .sketch-border {
+        border: 2px solid #2c2c2c;
+        border-radius: 4px;
+      }
+      /* Custom scrollbar for a cleaner look */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #999;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
