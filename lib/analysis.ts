@@ -93,7 +93,7 @@ export async function analyzeFloorPlan(base64Image: string): Promise<AnalysisRes
 
     return {
       id: `pred-${index}`,
-      type: pred.class, // Map class name directly
+      type: pred.class as any, // Map class name directly (casted to any/ElementType to avoid TS error)
       label: `${pred.class} (${Math.round(pred.confidence * 100)}%)`,
       box_2d: [norm_y_min, norm_x_min, norm_y_max, norm_x_max] // [ymin, xmin, ymax, xmax]
     };

@@ -43,7 +43,7 @@ export const Landing: React.FC<LandingProps> = ({ onStart }) => {
           <Button onClick={onStart}>
             Try It Now <Pencil className="w-5 h-5" />
           </Button>
-          <Button variant="secondary">
+          <Button variant="secondary" onClick={() => window.open('https://github.com/spitfiresb/FloorSense', '_blank')}>
             Read the Docs <FileText className="w-5 h-5" />
           </Button>
         </div>
