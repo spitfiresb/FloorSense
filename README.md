@@ -2,7 +2,6 @@
 <div align="center">
 
 # F L O O R S E N S E
-### The AI-Powered Blueprints of Tomorrow.
 
 <br />
 
@@ -23,7 +22,7 @@
 
 - **Instant Recognition**: Drag & drop blueprints to extract layout data in seconds.
 - **Interactive Viewer**: Pan, zoom, and inspect layers in a custom CAD-style interface.
-- **Smart Analytics**: Automated item counting and area estimation.
+- **Smart Analytics**: Automated item counting.
 - **Secure Processing**: Client-side heavy lifting with secure API integration.
 
 ## // DEPLOYMENT
@@ -44,5 +43,5 @@ Deploy your own instance of FloorSense to the edge with a single click.
 ---
 
 <div align="center">
-  <sub>Built with precision by <a href="https://github.com/spitfiresb">@spitfiresb</a></sub>
+  <sub>Built with love by <a href="https://github.com/spitfiresb">@spitfiresb</a></sub>
 </div>
