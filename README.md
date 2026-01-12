@@ -6,8 +6,6 @@
 
 <br />
 
-![FloorSense Demo](https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2531&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
-
 <br />
 
 [Features](#features) • [Deployment](#deployment) • [Tech Stack](#stack)
@@ -16,15 +14,15 @@
 
 ---
 
-## // MISSION
-**FloorSense** is not just another floor plan analyzer. It is a **temporal bridge** between static architectural drawings and dynamic, intelligent data. By leveraging advanced computer vision, we turn raw pixels into interactive, queryable entities—instantly identifying perimeters, openings, and furnishings with surgical precision.
+## // ABOUT
+**FloorSense** is a personal project exploring the potential of computer vision in architecture. It transforms static floor plan images into interactive, queryable data. Built to experiment with edge detection and object recognition, it identifies perimeters, openings, and furnishings to create a digital model of any blueprint.
 
 ## // FEATURES
 > [!NOTE]
 > Powered by Next.js 16 & React 19
 
 - **Instant Recognition**: Drag & drop blueprints to extract layout data in seconds.
-- **Interactive Viewer**: Pan, zoom, and inspect layers in our specialized CAD-style interface.
+- **Interactive Viewer**: Pan, zoom, and inspect layers in a custom CAD-style interface.
 - **Smart Analytics**: Automated item counting and area estimation.
 - **Secure Processing**: Client-side heavy lifting with secure API integration.
 
