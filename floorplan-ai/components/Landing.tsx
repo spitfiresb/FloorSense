@@ -14,10 +14,10 @@ export const Landing: React.FC<LandingProps> = ({ onStart }) => {
           Intelligent Floor Plan Analysis
         </h1>
         <p className="font-hand text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Upload any architectural drawing and let our AI instantly identify
-          rooms, doors, windows, and furniture with 99% accuracy.
+          Upload any architectural drawing and let our model instantly identify
+          doors, windows, and rooms
         </p>
-        
+
         <div className="flex gap-6 justify-center mt-8">
           <Button onClick={onStart}>
             Try It Now <Pencil className="w-5 h-5" />
@@ -33,7 +33,7 @@ export const Landing: React.FC<LandingProps> = ({ onStart }) => {
           {
             icon: <Eye className="w-12 h-12 mb-4 text-ink" />,
             title: "INSTANT DETECTION",
-            desc: "Model inference runs in milliseconds. Upload and get results immediately."
+            desc: "Model inference runs in seconds. Upload and get results immediately."
           },
           {
             icon: <Layers className="w-12 h-12 mb-4 text-ink" />,
